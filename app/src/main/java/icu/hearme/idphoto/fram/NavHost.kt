@@ -18,6 +18,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import icu.hearme.idphoto.model.IDViewModel
 import icu.hearme.idphoto.page.MainPage
+import icu.hearme.idphoto.page.PaperPrintApp
 import icu.hearme.idphoto.page.PhotoBackgroundChanger
 import icu.hearme.idphoto.page.PhotoCropperPage
 import icu.hearme.idphoto.page.PhotoPreviewPage
@@ -64,6 +65,11 @@ fun NavHosts(viewModel: IDViewModel, modifier: Modifier = Modifier){
                     AppBarSelectionActions(3, viewModel)
                     PhotoPreviewPage(viewModel)
                 }
+            }
+        }
+        navigation(startDestination = "paperprint", route = "PaperPrintHelper"){
+            composable("paperprint") {
+                PaperPrintApp()
             }
         }
     }

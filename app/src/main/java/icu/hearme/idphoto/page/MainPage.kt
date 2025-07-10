@@ -109,7 +109,7 @@ fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier) {
         imageUri = uri
         showProgress = true
     }
-    
+
     // 相机启动器
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
@@ -177,6 +177,22 @@ fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier) {
                         Modifier.size(60.dp)
                     )
                     Text("本地照片制作", style = TextStyle.Default.copy(fontSize = 25.sp, fontWeight = FontWeight.Bold))
+                }
+            }
+
+            OutlinedCard(modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
+                .clickable(onClick = {
+                    viewModel.navController.value?.navigate("paperprint")
+                }),
+                colors = CardColors(Color.White,Color.Black,Color.Black,Color.Black, )
+            ) {
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_test_paper),
+                        contentDescription = null,
+                        Modifier.size(60.dp)
+                    )
+                    Text("试卷打印", style = TextStyle.Default.copy(fontSize = 25.sp, fontWeight = FontWeight.Bold))
                 }
             }
         }
