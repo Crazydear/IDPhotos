@@ -39,13 +39,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,7 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
     val pagerState = rememberPagerState(
         pageCount = { 2 }
     )
-    val titles = listOf<String>("电子照", "排版照")
+    val titles = stringArrayResource(R.array.pre_title)
     var showExButton by remember { mutableStateOf<Boolean>(false) }
     val defaultPic = ImageBitmap.imageResource(R.drawable.defaultpic)
 
@@ -142,28 +143,28 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                             FlowRow(modifier = Modifier.align(Alignment.TopCenter).padding(top = 10.dp)) {
                                 TextButton(onClick = { screenMode = 0 }) {
-                                    Text("自适应版式")
+                                    Text(stringResource(R.string.layout_auto))
                                 }
                                 when (printSize){
                                     PicSizeType.ThreeInch -> {
                                         if (picType == PicSizeType.OneInch) {
                                             TextButton(onClick = { screenMode = 1 }) {
-                                                Text("双拼版式")
+                                                Text(stringResource(R.string.layout_double))
                                             }
                                         }
                                         TextButton(onClick = { screenMode = 2 }) {
-                                            Text("版式1")
+                                            Text(stringResource(R.string.layout_one))
                                         }
 
                                     }
                                     PicSizeType.FourInch -> {
                                         if (picType == PicSizeType.OneInch) {
                                             TextButton(onClick = { screenMode = 3 }) {
-                                                Text("双拼版式")
+                                                Text(stringResource(R.string.layout_double))
                                             }
                                         }
                                         TextButton(onClick = { screenMode = 4 }) {
-                                            Text("版式1")
+                                            Text(stringResource(R.string.layout_one))
                                         }
                                     }
                                     else -> {}
@@ -233,7 +234,7 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                     }
                     showExButton = true
                 }) {
-                    Text("确定")
+                    Text(stringResource(R.string.complete))
                 }
                 if (showExButton) {
                     when (pagerState.currentPage) {
@@ -241,7 +242,7 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                             val imageResult: ImageResult = screenshotState.imageState.value
                             if (imageResult is ImageResult.Success && !imageResult.data.isRecycled) {
                                 val copiedBitmap = imageResult.data.copy(imageResult.data.config!!, true)
-                                SaveImageToCustomFolder(copiedBitmap, tips = "保存到相册")
+                                SaveImageToCustomFolder(copiedBitmap, tips = stringResource(R.string.save_to_album))
                             }
                         }
 
@@ -249,12 +250,13 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                             val imageResult: ImageResult = screenshotState2.imageState.value
                             if (imageResult is ImageResult.Success && !imageResult.data.isRecycled) {
                                 val copiedBitmap = imageResult.data.copy(imageResult.data.config!!, true)
+                                val jobName = stringResource(R.string.photo_print)
                                 Button(onClick = {
-                                    BitmapPrinter.printBitmap(context, copiedBitmap, "照片打印")
+                                    BitmapPrinter.printBitmap(context, copiedBitmap, jobName)
                                 }, modifier = Modifier.padding(start = 10.dp)) {
-                                    Text("打印")
+                                    Text(stringResource(R.string.print))
                                 }
-                                SaveImageToCustomFolder(copiedBitmap, tips = "保存到相册")
+                                SaveImageToCustomFolder(copiedBitmap, tips = stringResource(R.string.save_to_album))
                             }
                         }
                     }

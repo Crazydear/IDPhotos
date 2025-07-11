@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="toolbar_name">
+        <item>首页</item>
+        <item>调整背景色</item>
+        <item>裁剪</item>
+        <item>预览图</item>
+    </string-array>
+    <string-array name="pre_title">
+        <item>电子照</item>
+        <item>排版照</item>
+    </string-array>
+</resources>

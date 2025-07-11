@@ -25,11 +25,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import icu.hearme.idphoto.screenshot.ImageResult
 import icu.hearme.idphoto.screenshot.ScreenshotBox
 import icu.hearme.idphoto.screenshot.rememberScreenshotState
+import icu.hearme.idphoto.R
 import kotlin.math.roundToInt
 
 /**
@@ -129,12 +131,10 @@ fun PhotoCropper(
             ){}
 
         Button(
-            onClick = {
-                screenshotState.capture()
-            },
+            onClick = { screenshotState.capture() },
             modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 15.dp)
         ) {
-            Text("下一步")
+            Text(stringResource(R.string.next))
         }
     }
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,8 +55,10 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 @Composable
-fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier) {
+fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier, navigate: (String) -> Unit) {
     val context = LocalContext.current
+    val per_album = stringResource(R.string.per_album)
+    val per_camera = stringResource(R.string.per_camera)
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var bitmapTemp by remember { mutableStateOf<Bitmap?>(null) }
     val uri = remember { createMediaStoreUri(context) }
@@ -94,12 +97,12 @@ fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier) {
         delay(500)
         bitmapTemp?.let {
             viewModel.setReginBitmap(it)
-            if(!it.isRecycled) {
+            if (!it.isRecycled) {
                 val frame = MLFrame.fromBitmap(it)
                 val segmentations = analyzer!!.analyseFrame(frame)
                 viewModel.setRemoveBgBitmap(segmentations.get(0).foreground)
                 showProgress = false
-                viewModel.navController.value?.navigate("changebg")
+                navigate("changebg")
             }
         }
     }
@@ -126,84 +129,113 @@ fun MainPage(viewModel: IDViewModel = viewModel(), modifier: Modifier) {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { isGranted ->
         if (isGranted.all { it.value }) {
-            when (lauchType){
+            when (lauchType) {
                 1 -> launcher.launch("image/*")
                 2 -> cameraLauncher.launch(uri)
             }
         } else {
-            val tip = when (lauchType){
-                1 -> "需要权限才能访问相册"
-                2 -> "需要拍照权限才能访问使用相机"
+            val tip = when (lauchType) {
+                1 -> per_album
+                2 -> per_camera
                 else -> ""
             }
             Toast.makeText(context, tip, Toast.LENGTH_SHORT).show()
         }
     }
 
-    Box(modifier = modifier.fillMaxSize(), contentAlignment= Alignment.Center) {
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp),
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedCard(modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
-                .clickable(onClick = {
-                    lauchType = 2
-                    permissionLauncher.launch(arrayOf(Manifest.permission.CAMERA))
-                }),
-                colors = CardColors(Color.Transparent, Color.Black, Color.Black, Color.Black,)
+            OutlinedCard(
+                modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
+                    .clickable(onClick = {
+                        lauchType = 2
+                        permissionLauncher.launch(arrayOf(Manifest.permission.CAMERA))
+                    }),
+                colors = CardColors(Color.Transparent, Color.Black, Color.Black, Color.Black)
             ) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Transparent),horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().background(Color.Transparent),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_camera),
                         contentDescription = null,
                         Modifier.size(60.dp)
                     )
-                    Text("一键拍照制作", style = TextStyle.Default.copy(fontSize = 25.sp, fontWeight = FontWeight.Bold))
+                    Text(
+                        "一键拍照制作",
+                        style = TextStyle.Default.copy(
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
             }
 
-            OutlinedCard(modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
-                .clickable(onClick = {
-                    lauchType = 1
-                    requestPermissions { reslut -> permissionLauncher.launch(reslut) }
-                }),
-                colors = CardColors(Color.White,Color.Black,Color.Black,Color.Black, )
+            OutlinedCard(
+                modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
+                    .clickable(onClick = {
+                        lauchType = 1
+                        requestPermissions { reslut -> permissionLauncher.launch(reslut) }
+                    }),
+                colors = CardColors(Color.White, Color.Black, Color.Black, Color.Black)
             ) {
-                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_pic),
                         contentDescription = null,
                         Modifier.size(60.dp)
                     )
-                    Text("本地照片制作", style = TextStyle.Default.copy(fontSize = 25.sp, fontWeight = FontWeight.Bold))
+                    Text(
+                        "本地照片制作",
+                        style = TextStyle.Default.copy(
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
             }
 
-            OutlinedCard(modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
-                .clickable(onClick = {
-                    viewModel.navController.value?.navigate("paperprint")
-                }),
-                colors = CardColors(Color.White,Color.Black,Color.Black,Color.Black, )
+            OutlinedCard(
+                modifier = Modifier.fillMaxWidth(0.5f).background(Color.White)
+                    .clickable(onClick = { navigate("paperprint") }),
+                colors = CardColors(Color.White, Color.Black, Color.Black, Color.Black)
             ) {
-                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_test_paper),
                         contentDescription = null,
                         Modifier.size(60.dp)
                     )
-                    Text("试卷打印", style = TextStyle.Default.copy(fontSize = 25.sp, fontWeight = FontWeight.Bold))
+                    Text(
+                        "试卷打印",
+                        style = TextStyle.Default.copy(
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
             }
         }
         Copyright(
-            modifier = Modifier.offset(y = with(LocalDensity.current) { (-20).dp })
-            .align(Alignment.BottomCenter)
+            modifier = Modifier
+                .offset(y = with(LocalDensity.current) { (-20).dp })
+                .align(Alignment.BottomCenter)
         )
-        if (showProgress){
+        if (showProgress) {
             CircularProgressIndicator(
-                modifier = Modifier.size(30.dp)
-                    .offset(y = with(LocalDensity.current){ (-40).dp })
+                modifier = Modifier
+                    .size(30.dp)
+                    .offset(y = with(LocalDensity.current) { (-40).dp })
                     .align(Alignment.BottomCenter)
             )
         }

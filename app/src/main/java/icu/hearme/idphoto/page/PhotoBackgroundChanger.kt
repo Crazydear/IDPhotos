@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,7 +46,7 @@ import icu.hearme.idphoto.screenshot.ScreenshotBox
 import icu.hearme.idphoto.screenshot.rememberScreenshotState
 
 @Composable
-fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel()) {
+fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel(), navigate: (String) -> Unit) {
     val regionBitmap by viewModel.rBitmap.collectAsState()
     val bitmap by viewModel.removebgBitmap.collectAsState()
     val defalt = painterResource(R.drawable.defaultpic)
@@ -72,7 +73,7 @@ fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel()) {
         if (imageResult is ImageResult.Success && !imageResult.data.isRecycled){
             val copiedBitmap = imageResult.data.copy(imageResult.data.config!!, true)
             viewModel.setOptBitmap(copiedBitmap, bgColor)
-            viewModel.navController.value?.navigate("crop")
+            navigate("crop")
         }
     }
 
@@ -108,8 +109,7 @@ fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel()) {
             }
         }
         Spacer(modifier = Modifier.height(with(LocalDensity){ 10.dp }))
-        Column(modifier = Modifier
-            .fillMaxWidth()
+        Column(modifier = Modifier.fillMaxWidth()
             .padding(bottom = with(LocalDensity) { 20.dp })) {
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -137,7 +137,7 @@ fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel()) {
             Button(onClick = {
                 screenshotState.capture()
             }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Text("下一步")
+                Text(stringResource(R.string.next))
             }
         }
     }

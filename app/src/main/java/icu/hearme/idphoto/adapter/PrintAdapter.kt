@@ -16,7 +16,7 @@ import java.io.FileOutputStream
 
 
 object BitmapPrinter {
-
+    // 证件照打印服务
     fun printBitmap(context: Context, bitmap: Bitmap, jobName: String) {
         // 获取打印服务
         val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
@@ -80,6 +80,7 @@ object BitmapPrinter {
         printManager.print(jobName, printAdapter, printAttributes)
     }
 
+    // 试卷打印服务
     fun printDocument(context: Context, bitmaps: List<Bitmap>) {
         val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
         val jobName = "${context.getString(R.string.app_name)} 打印任务"
@@ -119,7 +120,7 @@ object BitmapPrinter {
                         val pdfDocument = PdfDocument()
 
                         // 添加每一页
-                        bitmaps?.forEachIndexed { index, pageBitmap ->
+                        bitmaps.forEachIndexed { index, pageBitmap ->
                             val pageInfo = PdfDocument.PageInfo.Builder(
                                 pageBitmap.width,
                                 pageBitmap.height,

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">证件照</string>
+    <string name="per_album">需要权限才能访问相册</string>
+    <string name="per_camera">需要拍照权限才能访问使用相机</string>
+    <string name="next">下一步</string>
+    <string name="complete">确认</string>
+    <string name="print">打印</string>
+    <string name="save_to_album">保存到相册</string>
+    <string name="photo_print">照片打印</string>
+    <string name="layout_auto">自适应版式</string>
+    <string name="layout_double">双拼版式</string>
+    <string name="layout_one">版式1</string>
 </resources>
