@@ -1,4 +1,4 @@
-package icu.hearme.paperprinthelper.view
+package icu.hearme.idphoto.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

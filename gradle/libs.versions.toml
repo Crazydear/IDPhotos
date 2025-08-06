@@ -1,25 +1,34 @@
 [versions]
-agp = "8.11.0"
-kotlin = "2.0.21"
-coreKtx = "1.10.1"
+agp = "8.12.0"
+material = "1.8.2"
+componentsResources = "1.8.2"
+foundation = "1.8.2"
+kotlin = "2.2.0"
+coreKtx = "1.15.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.6.1"
-activityCompose = "1.8.0"
-composeBom = "2024.09.00"
-navigationCompose = "2.8.8"
-lifecycleViewmodelAndroid = "2.8.7"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.9.1"
+lifecycleViewmodelAndroid = "2.9.1"
+activityCompose = "1.10.1"
 activityKtx = "1.10.1"
+composeBom = "2024.10.00"
+navigationCompose = "2.8.9"
 navigationComposeVersion = "2.8.9"
 material3AdaptiveNavigationSuiteAndroid = "1.3.2"
 material3WindowSizeClassAndroid = "1.3.1"
 adaptiveNavigationAndroid = "1.1.0"
 huaweiML = "3.7.0.302"
 huaweiAgc = "1.9.1.301"
+composeMultiplatform = "1.8.2"
+composeHotReload = "1.0.0-beta04"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
+components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "componentsResources" }
+foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "foundation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -37,6 +46,7 @@ androidx-material3-window-size-class1-android = { group = "androidx.compose.mate
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+material = { module = "org.jetbrains.compose.material:material", version.ref = "material" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
 androidx-material3-adaptive-navigation-suite-android = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
 androidx-adaptive-navigation-android = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation-android", version.ref = "adaptiveNavigationAndroid" }
@@ -44,8 +54,12 @@ huawei-agc = { group = "com.huawei.agconnect", name = "agconnect-core", version.
 huawei-ml-vision-segmentation = { group = "com.huawei.hms", name = "ml-computer-vision-segmentation", version.ref = "huaweiML"}
 huawei-ml-vision-body-model = { group = "com.huawei.hms", name = "ml-computer-vision-image-segmentation-body-model", version.ref = "huaweiML"}
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }

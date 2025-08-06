@@ -17,8 +17,8 @@ import kotlin.ranges.step
 // 试卷打印模块
 fun createSinglePage(bitmap: Bitmap): Bitmap {
     // 创建一张足够大的画布，将图片居中显示
-    val width = (bitmap.width * 1.5).toInt()
-    val height = (bitmap.height * 1.5).toInt()
+    val width = (bitmap.width)// * 1.5).toInt()
+    val height = (bitmap.height)// * 1.5).toInt()
 
     val page = createBitmap(width, height)
     val canvas = Canvas(page)

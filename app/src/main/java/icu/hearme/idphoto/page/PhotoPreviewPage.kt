@@ -1,6 +1,7 @@
 package icu.hearme.idphoto.page
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -51,6 +54,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import icu.hearme.idphoto.capturable.capturable
+import icu.hearme.idphoto.capturable.rememberCaptureController
 import icu.hearme.idphoto.screenshot.ScreenshotBox
 import icu.hearme.idphoto.screenshot.rememberScreenshotState
 import icu.hearme.idphoto.R
@@ -64,6 +69,7 @@ import icu.hearme.idphoto.view.PrintingPaper3R6
 import icu.hearme.idphoto.view.PrintingPaper3R8
 import icu.hearme.idphoto.view.PrintingPaper4R11
 import icu.hearme.idphoto.view.PrintingPaper4R8
+import icu.hearme.idphoto.view.PrintingPaper4R81
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -73,7 +79,6 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
     val optBitmap by viewModel.optBitmap.collectAsState()
     val picType by viewModel.picSizeType.collectAsState()
     val screenshotState = rememberScreenshotState()
-    val screenshotState2 = rememberScreenshotState()
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         pageCount = { 2 }
@@ -81,17 +86,14 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
     val titles = stringArrayResource(R.array.pre_title)
     var showExButton by remember { mutableStateOf<Boolean>(false) }
     val defaultPic = ImageBitmap.imageResource(R.drawable.defaultpic)
-
+    val captureController = rememberCaptureController()
+    var multiBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
             ScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .height(40.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally).height(40.dp)
             ) {
                 titles.forEachIndexed { index, title ->
                     Tab(
@@ -101,7 +103,7 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                                 textDecoration = if (pagerState.currentPage == index) TextDecoration.Underline else null,
                                 color = if (pagerState.currentPage == index) Color.Blue else Color.DarkGray
                             ))
-                               },
+                        },
                         selected = pagerState.currentPage == index,
                         onClick = {
                             coroutineScope.launch {
@@ -113,8 +115,7 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
             }
 
             HorizontalPager(state = pagerState,
-                modifier = Modifier.fillMaxSize()
-                .weight(1f),
+                modifier = Modifier.fillMaxSize().weight(1f),
                 verticalAlignment = Alignment.Top) { page ->
                 when (page) {
                     0 -> {
@@ -155,12 +156,14 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                                         TextButton(onClick = { screenMode = 2 }) {
                                             Text(stringResource(R.string.layout_one))
                                         }
-
                                     }
                                     PicSizeType.FourInch -> {
                                         if (picType == PicSizeType.OneInch) {
                                             TextButton(onClick = { screenMode = 3 }) {
                                                 Text(stringResource(R.string.layout_double))
+                                            }
+                                            TextButton(onClick = { screenMode = 5 }) {
+                                                Text(stringResource(R.string.layout_double1))
                                             }
                                         }
                                         TextButton(onClick = { screenMode = 4 }) {
@@ -171,48 +174,32 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                                 }
                             }
 
-                            AdaptiveSizeBox(modifier = Modifier.align(Alignment.Center).wrapContentSize()) {
-                                ScreenshotBox(screenshotState = screenshotState2, modifier = Modifier.wrapContentSize()){
-
+                            AdaptiveSizeBox(modifier = Modifier.wrapContentSize(Alignment.Center)) {
+                                Surface(modifier = Modifier.fillMaxWidth(0.75f).wrapContentSize(Alignment.Center)
+                                    .capturable(captureController), color = Color.White) {
                                     when (screenMode) {
                                         0 -> {
-                                            CustomPrintPaper(
-                                                optBitmap ?: defaultPic,
-                                                picType, printSize,
-                                                modifier = Modifier.fillMaxWidth(0.75f)
-                                            )
+                                            CustomPrintPaper(optBitmap ?: defaultPic, picType, printSize)
                                         }
 
                                         1 -> {
-                                            PrintingPaper3R6(
-                                                optBitmap ?: defaultPic,
-                                                picType,
-                                                modifier = Modifier.fillMaxWidth(0.75f)
-                                            )
+                                            PrintingPaper3R6(optBitmap ?: defaultPic, picType)
                                         }
 
                                         2 -> {
-                                            PrintingPaper3R8(
-                                                optBitmap ?: defaultPic,
-                                                picType,
-                                                modifier = Modifier.fillMaxWidth(0.75f)
-                                            )
+                                            PrintingPaper3R8(optBitmap ?: defaultPic, picType)
                                         }
 
                                         3 -> {
-                                            PrintingPaper4R11(
-                                                optBitmap ?: defaultPic,
-                                                picType,
-                                                modifier = Modifier.fillMaxWidth(0.75f)
-                                            )
+                                            PrintingPaper4R11(optBitmap ?: defaultPic, picType)
                                         }
 
                                         4 -> {
-                                            PrintingPaper4R8(
-                                                optBitmap ?: defaultPic,
-                                                picType,
-                                                modifier = Modifier.fillMaxWidth(0.75f)
-                                            )
+                                            PrintingPaper4R8(optBitmap ?: defaultPic, picType)
+                                        }
+
+                                        5 -> {
+                                            PrintingPaper4R81(optBitmap ?: defaultPic, picType)
                                         }
                                     }
                                 }
@@ -223,14 +210,21 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth(0.75f)
-                .align(Alignment.CenterHorizontally), horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier.fillMaxWidth(0.75f).align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
 
                 Button(onClick = {
                     when (pagerState.currentPage) {
                         0 -> { screenshotState.capture() }
-                        1 -> { screenshotState2.capture() }
+                        1 -> {
+                            coroutineScope.launch {
+                                val bitmapAsync = captureController.captureAsync()
+                                try {
+                                    multiBitmap = bitmapAsync.await()
+                                } catch (error: Throwable) { }
+                            }
+                        }
                     }
                     showExButton = true
                 }) {
@@ -247,9 +241,8 @@ fun PhotoPreviewPage(viewModel: IDViewModel = viewModel()) {
                         }
 
                         1 -> {
-                            val imageResult: ImageResult = screenshotState2.imageState.value
-                            if (imageResult is ImageResult.Success && !imageResult.data.isRecycled) {
-                                val copiedBitmap = imageResult.data.copy(imageResult.data.config!!, true)
+                            if (multiBitmap != null) {
+                                val copiedBitmap = multiBitmap!!.asAndroidBitmap().copy(Bitmap.Config.ARGB_8888, false)
                                 val jobName = stringResource(R.string.photo_print)
                                 Button(onClick = {
                                     BitmapPrinter.printBitmap(context, copiedBitmap, jobName)

@@ -9,5 +9,6 @@
     <string name="photo_print">照片打印</string>
     <string name="layout_auto">自适应版式</string>
     <string name="layout_double">双拼版式</string>
+    <string name="layout_double1">双拼版式1</string>
     <string name="layout_one">版式1</string>
 </resources>

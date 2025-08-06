@@ -1,5 +1,8 @@
 package icu.hearme.idphoto.enums
 
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+
 enum class PicSizeType(val code: Int, val value: String, val width: Int, val height: Int) {
     OneInch(1, "1寸", 295,413),
     TwoInch(2, "2寸",413,579),
@@ -10,5 +13,9 @@ enum class PicSizeType(val code: Int, val value: String, val width: Int, val hei
 
     fun getAspectRatio(): Float {
         return this.width.toFloat() / this.height.toFloat()
+    }
+
+    fun getDpSize(): DpSize {
+        return DpSize(this.width.dp, this.height.dp)
     }
 }

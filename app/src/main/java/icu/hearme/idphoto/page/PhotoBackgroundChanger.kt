@@ -28,6 +28,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -45,6 +46,7 @@ import icu.hearme.idphoto.screenshot.ImageResult
 import icu.hearme.idphoto.screenshot.ScreenshotBox
 import icu.hearme.idphoto.screenshot.rememberScreenshotState
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel(), navigate: (String) -> Unit) {
     val regionBitmap by viewModel.rBitmap.collectAsState()
@@ -60,7 +62,6 @@ fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel(), navigate: (Stri
             regionBitmap?.let {
                 value = BitmapPainter(it)
             }
-
         } else {
             bitmap?.let {
                 value = BitmapPainter(it)
@@ -99,7 +100,8 @@ fun PhotoBackgroundChanger(viewModel: IDViewModel = viewModel(), navigate: (Stri
                 val screenshotPlaceable = subcompose("screenshot") {
                     ScreenshotBox(
                         screenshotState = screenshotState,
-                        modifier = Modifier.size(imagePlaceable.width.toDp(), imagePlaceable.height.toDp())){}
+                        modifier = Modifier.size(imagePlaceable.width.toDp(), imagePlaceable.height.toDp())
+                    ){}
                 }[0].measure(Constraints.fixed(imagePlaceable.width, imagePlaceable.height))
 
                 layout(imagePlaceable.width, imagePlaceable.height) {

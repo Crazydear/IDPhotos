@@ -38,7 +38,7 @@ import icu.hearme.idphoto.adapter.BitmapPrinter.printDocument
 import icu.hearme.idphoto.utils.prepareImagesForPrinting
 import icu.hearme.idphoto.view.LoadingIndicator
 import icu.hearme.idphoto.view.SelectedImageGrid
-import icu.hearme.paperprinthelper.view.EmptyState
+import icu.hearme.idphoto.view.EmptyState
 import icu.hearme.paperprinthelper.view.PrintPreviewScreen
 import kotlinx.coroutines.launch
 import kotlin.collections.isNotEmpty
@@ -54,7 +54,7 @@ fun PaperPrintApp(initialUris: List<Uri> = emptyList()) {
 
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 12),
-        onResult = { uris -> selectedUris = uris ?: emptyList() }
+        onResult = { uris -> selectedUris = uris }
     )
 
     Scaffold(
